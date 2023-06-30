@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  height: 100%;
+  & .content__container {
+    flex: 5;
+    overflow-y: scroll;
+  }
+}

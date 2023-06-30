@@ -1,0 +1,9 @@
+.homepage__wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  & .content__container{
+    flex-grow: 1;
+    overflow-x: hidden;
+  }
+}

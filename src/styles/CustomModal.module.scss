@@ -1,0 +1,65 @@
+$borderRadius: 8px;
+.darkBG {
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  width: min(30rem, 80%);
+}
+
+.modal {
+  background: white;
+  color: white;
+  z-index: 10;
+  border-radius: $borderRadius;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  height: 100%;
+}
+
+.modalHeader {
+  height: 50px;
+  background: white;
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.heading {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+}
+
+.modalContent {
+  font-size: 14px;
+  color: #2c3e50;
+  text-align: center;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+
+.modalActions {
+  position: absolute;
+  bottom: 2px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.header {
+  font-size: 2rem;
+  padding: 1rem 1rem 1rem;
+}

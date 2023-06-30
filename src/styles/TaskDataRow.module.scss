@@ -1,0 +1,37 @@
+.link {
+  text-decoration: none;
+  color: #4266cc;
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 10px;
+  }
+}
+
+.cell-data-container {
+  padding: 0.5rem;
+  vertical-align: top;
+
+  &.status {
+    border-radius: 10px;
+    &.NotStarted {
+      background-color: #c1c7d0;
+      color: #172b4d;
+    }
+    &.InProgress {
+      background-color: #deebff;
+      color: #0747ba;
+    }
+    &.Completed {
+      background-color: #e3fcef;
+      color: #247e5e;
+    }
+    &.Cancelled {
+      background-color: grey;
+    }
+  }
+}

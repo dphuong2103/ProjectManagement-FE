@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  & .message {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #42526e;
+  }
+}
