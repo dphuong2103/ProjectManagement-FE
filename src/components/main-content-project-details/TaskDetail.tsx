@@ -38,6 +38,15 @@ function TaskDetail() {
     const [isShowingAssigneeField, setIsShowingAssigneeField] = useState(false);
     const { setTaskList } = useTaskListContext();
     const { setIsLoading } = useSpinnerContext();
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [screenWidth]);
+
     useEffect(() => {
         getTask();
         getComments();
@@ -105,6 +114,11 @@ function TaskDetail() {
     function handleOnBlurTaskNameField() {
         setTaskShown({ ...originalTask });
         setIsTaskNameFocused(false);
+    }
+
+    function handleOnBlurTaskDescriptionField() {
+        setTaskShown({ ...originalTask });
+        setIsDescriptionFocused(false);
     }
 
     function sortComments(comments: IComment[]) {
@@ -199,7 +213,7 @@ function TaskDetail() {
         } catch (err) {
             setTaskShown({ ...originalTask });
             console.log(err);
-            toast.error("Cannot update Task, please try again") 
+            toast.error("Cannot update Task, please try again")
         }
         finally {
             setIsShowingAssigneeField(false);
@@ -244,6 +258,7 @@ function TaskDetail() {
                         </button>
                     </div>}
                 </form>
+
                 <form className={styles['form']} onSubmit={handleSubmitUpdateTaskDetails} >
                     <TextField
                         minRows={4}
@@ -261,11 +276,50 @@ function TaskDetail() {
                             <CheckIcon />
                         </button>
                         <button type='button'>
-                            <ClearIcon onClick={handleOnBlurTaskNameField} />
+                            <ClearIcon onClick={handleOnBlurTaskDescriptionField} />
                         </button>
                     </div>}
                 </form>
+
+                {
+                    screenWidth <= 600 && <>
+                        <FormControl>
+                            <InputLabel>
+                                Status
+                            </InputLabel>
+
+                            <Select
+                                value={taskShown.status.toString()}
+                                label="Status"
+                                name='status'
+                                onChange={handleSubmitChangeStatus}
+                                required
+                                variant='outlined'
+
+                                sx={{
+                                    '& .MuiSelect-select': {
+                                        textAlign: 'left'
+                                    }
+                                }}
+                            >
+                                {Object.keys(Status).map(statusKey => <MenuItem
+                                    key={StatusMapping[statusKey as keyof typeof StatusMapping]}
+                                    value={StatusMapping[statusKey as keyof typeof StatusMapping]}>{`${Status[statusKey as keyof typeof Status]}`}
+                                </MenuItem>)}
+                            </Select>
+                        </FormControl>
+                        <SearchUserField fullWidth selectedUser={taskShown.assignee ?? null} setSelectedUser={handleChangeAssignee} label='Assignee' />
+                        {
+                            taskShown.creator && <TextField fullWidth label='Reporter' defaultValue={taskShown.creator.displayName} disabled />
+                        }
+                        {
+                            taskShown.finishTime && <TextField fullWidth disabled label='Finish time' defaultValue={getDateString(taskShown.finishTime)} />
+                        }
+                    </>
+                }
+
                 <span className={styles['activity']}>Activity</span>
+
                 <div>
                     <span>Show: </span>
                     <ToggleButtonGroup
@@ -301,80 +355,82 @@ function TaskDetail() {
                 </form>
                 <TaskComments comments={comments} />
             </div>
-            <div className={styles['right-container']}>
-                <FormControl>
-                    <InputLabel>
-                        Status
-                    </InputLabel>
+            {
+                screenWidth > 600 && <div className={styles['right-container']}>
+                    <FormControl>
+                        <InputLabel>
+                            Status
+                        </InputLabel>
 
-                    <Select
-                        value={taskShown.status.toString()}
-                        label="Status"
-                        name='status'
-                        onChange={handleSubmitChangeStatus}
-                        required
-                        variant='outlined'
+                        <Select
+                            value={taskShown.status.toString()}
+                            label="Status"
+                            name='status'
+                            onChange={handleSubmitChangeStatus}
+                            required
+                            variant='outlined'
 
-                        sx={{
-                            '& .MuiSelect-select': {
-                                textAlign: 'left'
-                            }
-                        }}
-                    >
-                        {Object.keys(Status).map(statusKey => <MenuItem
-                            key={StatusMapping[statusKey as keyof typeof StatusMapping]}
-                            value={StatusMapping[statusKey as keyof typeof StatusMapping]}>{`${Status[statusKey as keyof typeof Status]}`}
-                        </MenuItem>)}
-                    </Select>
-                </FormControl>
-
-                <div className={styles['task-more-info__container']}>
-                    <table className={styles['task-more-info__table']}>
-                        <tbody className={styles['task-more-info__table__body']}>
-                            <tr className={styles['data-row']}>
-                                <th className={styles['header']}>Assignee:</th>
-                                {
-                                    isShowingAssigneeField ? <td className={styles['data']}>
-                                        <div className={styles['edit-field__container']}>
-                                            <SearchUserField label='' selectedUser={taskShown.assignee ?? null} setSelectedUser={handleChangeAssignee} fullWidth={true} />
-                                            <button onClick={handleCloseAssigneeField}>
-                                                <ClearIcon />
-                                            </button>
-                                        </div>
-                                    </td> : <td className={styles['data']} onClick={() => setIsShowingAssigneeField(true)}>{taskShown.assignee?.displayName ?? ''}</td>
+                            sx={{
+                                '& .MuiSelect-select': {
+                                    textAlign: 'left'
                                 }
-                            </tr>
-                            <tr className={styles['data-row']}>
-                                <th className={styles['header']}>Reporter:</th>
-                                <td className={styles['data']}>{taskShown.creator?.displayName ?? ''}</td>
-                            </tr>
-                            <tr className={styles['data-row']}>
-                                <th className={styles['header']}>Finish Time:</th>
-                                <td className={styles['data']}>{taskShown.finishTime ? getDateString(taskShown.finishTime) : ''}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            }}
+                        >
+                            {Object.keys(Status).map(statusKey => <MenuItem
+                                key={StatusMapping[statusKey as keyof typeof StatusMapping]}
+                                value={StatusMapping[statusKey as keyof typeof StatusMapping]}>{`${Status[statusKey as keyof typeof Status]}`}
+                            </MenuItem>)}
+                        </Select>
+                    </FormControl>
+
+                    <div className={styles['task-more-info__container']}>
+                        <table className={styles['task-more-info__table']}>
+                            <tbody className={styles['task-more-info__table__body']}>
+                                <tr className={styles['data-row']}>
+                                    <th className={styles['header']}>Assignee:</th>
+                                    {
+                                        isShowingAssigneeField ? <td className={styles['data']}>
+                                            <div className={styles['edit-field__container']}>
+                                                <SearchUserField label='' selectedUser={taskShown.assignee ?? null} setSelectedUser={handleChangeAssignee} fullWidth={true} />
+                                                <button onClick={handleCloseAssigneeField}>
+                                                    <ClearIcon />
+                                                </button>
+                                            </div>
+                                        </td> : <td className={styles['data']} onClick={() => setIsShowingAssigneeField(true)}>{taskShown.assignee?.displayName ?? ''}</td>
+                                    }
+                                </tr>
+                                <tr className={styles['data-row']}>
+                                    <th className={styles['header']}>Reporter:</th>
+                                    <td className={styles['data']}>{taskShown.creator?.displayName ?? ''}</td>
+                                </tr>
+                                <tr className={styles['data-row']}>
+                                    <th className={styles['header']}>Finish Time:</th>
+                                    <td className={styles['data']}>{taskShown.finishTime ? getDateString(taskShown.finishTime) : ''}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
+            }
 
-                <MyModal isOpen={isOpeningFinishTaskModal} setIsOpen={setIsOpeningFinishTaskModal} >
-                    <>
-                        <MyModal.Header>Task Completed</MyModal.Header>
-                        <div className={styles['finish-time__container']}>
-                            <div className={styles['finish-time']}>
-                                <LocalizationProvider dateAdapter={AdapterMoment} >
-                                    <DatePicker label='Finished time' value={finishTime} onChange={newDate => setFinishTime(moment(newDate))} />
-                                </LocalizationProvider>
-                            </div>
-
-                            <div className={styles['action__container']}>
-                                <Button variant='text' onClick={handleCancelFinishTaskModal}>Cancel</Button>
-                                <Button variant='contained' onClick={handleSubmitFinishTime}>Done</Button>
-                            </div>
+            <MyModal isOpen={isOpeningFinishTaskModal} setIsOpen={setIsOpeningFinishTaskModal} >
+                <>
+                    <MyModal.Header>Task Completed</MyModal.Header>
+                    <div className={styles['finish-time__container']}>
+                        <div className={styles['finish-time']}>
+                            <LocalizationProvider dateAdapter={AdapterMoment} >
+                                <DatePicker label='Finished time' value={finishTime} onChange={newDate => setFinishTime(moment(newDate))} />
+                            </LocalizationProvider>
                         </div>
-                    </>
-                </MyModal>
 
-            </div>
+                        <div className={styles['action__container']}>
+                            <Button variant='text' onClick={handleCancelFinishTaskModal}>Cancel</Button>
+                            <Button variant='contained' onClick={handleSubmitFinishTime}>Done</Button>
+                        </div>
+                    </div>
+                </>
+            </MyModal>
         </div >
     )
 }

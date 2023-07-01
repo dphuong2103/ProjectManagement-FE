@@ -9,6 +9,7 @@ import { auth } from '../firebase/firebase-config';
 import { createProject } from '../utilities/fetchData';
 import { toast } from 'react-toastify';
 import MyModal from './MyModal';
+import EmptyProjectList from './main-content-project-details/EmptyProjectList';
 
 function MainContentProjectList() {
   const { projectDetails, setProjectDetails } = useProjectsDetailsContext();
@@ -43,25 +44,28 @@ function MainContentProjectList() {
 
 
   return (
-    <div className={styles['container']}>
+    <div className={styles['project-list-container']}>
       <div className={styles['actions']}>
         <span>Projects</span>
         <Button variant='contained' onClick={toggleIsOpeningNewProjectModal}>Create Project</Button>
       </div>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="table">
-          <TableHead>
-            <TableRow>
-              <TableCell align='center'><StarOutlineIcon /></TableCell>
-              <TableCell>Project</TableCell>
-              <TableCell align="left">Project Leader</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {projectDetails.map((projectDetail) => <ProjectDataRow key={projectDetail.project.id} projectDetail={projectDetail} />)}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {
+        (!projectDetails || projectDetails.length === 0) ? <EmptyProjectList /> : <TableContainer>
+          <Table aria-label="table">
+            <TableHead>
+              <TableRow>
+                <TableCell align='center'><StarOutlineIcon /></TableCell>
+                <TableCell>Project</TableCell>
+                <TableCell align="left">Project Leader</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projectDetails.map((projectDetail) => <ProjectDataRow key={projectDetail.project.id} projectDetail={projectDetail} />)}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      }
+
       <MyModal isOpen={isOpeningNewProjectModal} setIsOpen={setIsOpeningNewProjectModal} >
         <>
           <MyModal.Header>Create new Project</MyModal.Header>

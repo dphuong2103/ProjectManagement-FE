@@ -18,6 +18,12 @@
       display: flex;
       align-items: center;
     }
+
+    & .btn-menu{
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
   }
 
   & .navbar__right {
@@ -61,6 +67,14 @@
       justify-content: end;
       padding: 1rem;
       gap: 1rem;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .navbar__left {
+    & .btn-menu {
+      display: none;
     }
   }
 }

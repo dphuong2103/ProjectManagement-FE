@@ -42,13 +42,13 @@ function ProjectDataRow({ projectDetail }: IProjectDataRowProps) {
             key={projectDetail.id}
             sx={{ '& td, & th': { border: 0 } }}
         >
-            <TableCell align='center'>
+            <TableCell align='center' >
                 <button onClick={updateProjectFavorite} className={styles['button']}>
                     {projectDetail.isFavorite ? <StarIcon color='success' /> : <StarOutlineIcon />}
                 </button>
             </TableCell>
-            <TableCell component="th" scope="row" align="left">
-                <div>
+            <TableCell component="th" scope="row" align="left" className={styles['project-name__cell']}>
+                <div className={styles['project-name__container']}>
                     <button onClick={handleProjectClick} className={styles['button']} >
                         {projectDetail.project.name}
                     </button>

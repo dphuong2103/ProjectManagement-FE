@@ -31,6 +31,14 @@ function ProjectSettings() {
     useEffect(() => {
         if (project != null) {
             setProjectShown(project);
+
+            setProjectDetails(prevProjectDetails => [...prevProjectDetails.map(upj =>{
+                if(upj.projectID === project.id){
+                    upj.project = project;
+                    return upj;
+                }
+                return upj;
+            })]);
         }
         getMembers();
 
@@ -43,7 +51,10 @@ function ProjectSettings() {
                 console.log(err);
             }
         }
-    }, [project, project?.id])
+
+
+
+    }, [project, project?.id, setProjectDetails])
 
 
     function handleClickCancel() {
@@ -140,6 +151,7 @@ function ProjectSettings() {
                     <Button variant='contained' type='submit'>Save</Button>
                 </div>
             </form>
+
             <div className={styles['members__container']}>
                 <div className={styles['top-bar__container']}>
                     <span className={styles['title']}>People</span>
@@ -169,6 +181,8 @@ function ProjectSettings() {
             <div className={styles['delete-btn__container']}>
                 <Button color='error' variant='outlined' fullWidth onClick={() => setIsShownDeleteProjectConfirmDialog(true)}>Delete Project</Button>
             </div>
+
+
             <Dialog
                 open={isShownDeleteProjectConfirmDialog}
                 onClose={handleCloseDialog}

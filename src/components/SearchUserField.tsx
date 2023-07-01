@@ -34,10 +34,9 @@ function SearchUserField({ excludeUsers, selectedUser, setSelectedUser, label, f
     }, [inputValue])
     return (
         <Autocomplete
-
             fullWidth={fullWidth}
             onBlur={onBlur}
-            sx={{ minWidth: 300 }}
+            sx={{ minWidth: 200 }}
             open={isOpenSearchMember}
             value={selectedUser}
             onChange={(_event: unknown, newValue: IUser | null) => {

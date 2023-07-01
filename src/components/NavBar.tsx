@@ -4,14 +4,14 @@ import { Avatar, Button, Divider, FormControl, IconButton, InputLabel, ListItemI
 import { auth, firebaseSignOut } from '../firebase/firebase-config';
 import MyModal from './MyModal';
 import { useEffect, useState } from 'react';
-import { useAuthContext, useProjectsDetailsContext, useSpinnerContext, useTaskListContext } from '../constant/context-value';
+import { useAuthContext, useProjectsDetailsContext, useShowingSideBarOnSmallScreenContext, useSpinnerContext, useTaskListContext } from '../constant/context-value';
 import { ITask, IUser, Status, StatusMapping } from '../data-types/DataType';
 import { updateTaskDetails, updateUserProfile } from '../utilities/fetchData';
 import { Link, useParams } from 'react-router-dom';
 import SearchUserField from './SearchUserField';
 import { toast } from 'react-toastify';
 import { Logout, } from '@mui/icons-material';
-
+import MenuIcon from '@mui/icons-material/Menu';
 function NavBar() {
     const [isOpeningNewProjectModal, setIsOpeningNewProjectModal] = useState(false);
     const { currentUser, setCurrentUser } = useAuthContext();
@@ -23,6 +23,7 @@ function NavBar() {
     const openSettingMenu = Boolean(settingMenuAnchorEl);
     const { setIsLoading } = useSpinnerContext();
     const [userShown, setUserShown] = useState<IUser>({} as IUser);
+    const { setIsShowingSideBarOnSmallScreen } = useShowingSideBarOnSmallScreenContext();
 
     function initialTask(): ITask {
         return {
@@ -123,27 +124,19 @@ function NavBar() {
 
     return (
         <div className={styles['navbar__container']}>
+
             <div className={styles['navbar__left']}>
+                {
+                    projectID && <button className={styles['btn-menu']} onClick={() => setIsShowingSideBarOnSmallScreen(true)} >
+                        <MenuIcon />
+                    </button>
+                }
                 <Link className={styles['btn-title']} to='/homePage'>
                     <PageTitle isHiddenOnSmallDevice={true}>Project Management</PageTitle>
                 </Link>
                 <Button variant='contained' onClick={toggleIsOpeningNewProjectModal}>Create</Button>
             </div>
             <div className={styles['navbar__right']}>
-                {/* <OutlinedInput
-                    startAdornment={
-                        <InputAdornment position="start">
-                            <SearchOutlinedIcon />
-                        </InputAdornment>
-                    }
-                    sx={{
-                        '& .MuiInputBase-input': {
-                            padding: '12px 8px'
-                        },
-                    }}
-                    placeholder='Search'
-                /> */}
-
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={(event: React.MouseEvent<HTMLElement>) => setSettingMenuAnchorEl(event.currentTarget)}

@@ -36,7 +36,7 @@ form {
       color: blue;
       user-select: none;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
     &.signup {
       justify-content: end;
@@ -49,6 +49,8 @@ form {
   display: flex;
   margin-top: auto;
   justify-content: end;
+  gap: 0.3rem;
+  font-size: 1.2rem;
 }
 
 .sign-in__container{
@@ -56,4 +58,6 @@ form {
   display: flex;
   margin-top: auto;
   justify-content: start;
+  font-size: 1.2rem;
+  gap: 0.3rem;
 }

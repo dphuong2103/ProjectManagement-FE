@@ -13,7 +13,6 @@ function Homepage() {
         setProjectDetails(getProjectDetailsResponse.data)
     }, [currentUser?.id, setProjectDetails]);
 
-
     useEffect(() => {
         getUserProjects();
     }, [getUserProjects]);
