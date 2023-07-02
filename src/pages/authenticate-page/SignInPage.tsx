@@ -14,7 +14,7 @@ import { useAuthContext, useSpinnerContext } from '../../constant/context-value'
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {setIsLoading} = useSpinnerContext();
+  const { setIsLoading } = useSpinnerContext();
   const { setCurrentUser } = useAuthContext();
 
 
@@ -38,7 +38,7 @@ function SignInPage() {
     catch (err) {
       toast.error('Invalid email or password');
       console.log('Error logging in' + err);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   }
@@ -58,7 +58,7 @@ function SignInPage() {
       </form>
       <div className={styles['sign-up__container']}>
         <span>Don't have an account?</span>
-        <Link to={routeName.signUp}> Sign up</Link>
+        <Link to={routeName.signUp} > Sign up</Link>
       </div>
     </>
   )

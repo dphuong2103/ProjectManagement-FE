@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { auth } from '../firebase/firebase-config';
+import { toast } from 'react-toastify';
+import axios, { AxiosError } from 'axios';
+import { auth, firebaseSignOut } from '../firebase/firebase-config';
 import {
   IComment,
   IProject,
@@ -22,8 +23,25 @@ const headers = () => {
     'Content-Type': 'application/json',
   };
 };
+const myAxios = () => {
+  const axiosInstance = axios.create({ headers: headers() });
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error: AxiosError) => {
+      // const originalRequest = error.config;
+      if (error.response?.status === 401) {
+        toast.warn('Please login again!');
+        await firebaseSignOut();
+      }
+      return Promise.reject(error);
+    }
+  );
+  return axiosInstance;
+};
 
-export const myAxios = () => axios.create({ headers: headers() });
+export default myAxios;
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const UPDATE_USER_PROFILE_URL = `${BASE_URL}${import.meta.env.VITE_API_USER}`;

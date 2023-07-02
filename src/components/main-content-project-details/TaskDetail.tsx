@@ -419,7 +419,7 @@ function TaskDetail() {
                     <MyModal.Header>Task Completed</MyModal.Header>
                     <div className={styles['finish-time__container']}>
                         <div className={styles['finish-time']}>
-                            <LocalizationProvider dateAdapter={AdapterMoment} >
+                            <LocalizationProvider dateAdapter={AdapterMoment}  >
                                 <DatePicker label='Finished time' value={finishTime} onChange={newDate => setFinishTime(moment(newDate))} />
                             </LocalizationProvider>
                         </div>
