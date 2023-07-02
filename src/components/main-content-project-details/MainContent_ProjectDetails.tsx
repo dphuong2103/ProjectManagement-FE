@@ -7,6 +7,8 @@ import { getProjectDetails } from '../../utilities/fetchData';
 import Drawer from '@mui/material/Drawer/Drawer';
 import { Box, } from '@mui/material';
 import { useShowingSideBarOnSmallScreenContext } from '../../constant/context-value';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 function MainContentProjectDetails() {
     const [project, setProject] = useState<IProject | null>(null);
     const { isShowingSideBarOnSmallScreen, setIsShowingSideBarOnSmallScreen } = useShowingSideBarOnSmallScreenContext();
@@ -28,7 +30,10 @@ function MainContentProjectDetails() {
                 const projectResponse = await getProjectDetails(projectID);
                 setProject(projectResponse.data);
             } catch (err) {
-                console.log(err);
+                if (err instanceof AxiosError && err.response?.status === 401) {
+                    return;
+                }
+                toast.error('Can not get task list, please reload the page!');
             }
         }
     }, [projectID])

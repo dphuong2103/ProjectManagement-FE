@@ -4,11 +4,12 @@ import { ITask } from '../data-types/DataType';
 import { getProjectTasks } from '../utilities/fetchData';
 import { toast } from 'react-toastify';
 import { useSpinnerContext } from '../constant/context-value';
+import { AxiosError } from 'axios';
 
 export const TaskListContextProvider = createContext({} as ITaskListContextValue);
 
 function TasklistContext({ children }: ITaskListContextProps) {
-    const {setIsLoading} = useSpinnerContext();
+    const { setIsLoading } = useSpinnerContext();
     const { projectID } = useParams();
     const [taskList, setTaskList] = useState<ITask[]>([]);
 
@@ -21,13 +22,18 @@ function TasklistContext({ children }: ITaskListContextProps) {
                 const getTasksResponse = await getProjectTasks(projectID);
                 setTaskList(getTasksResponse.data);
             } catch (err) {
+                if (err instanceof AxiosError) {
+                    if (err.response?.status === 401) {
+                        return;
+                    }
+                }
                 toast.error('Can not get task list, please reload the page!');
                 console.log(err);
             } finally {
                 setIsLoading(false);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectID])
     return (
         <TaskListContextProvider.Provider value={{ taskList, setTaskList }}>{children}</TaskListContextProvider.Provider>

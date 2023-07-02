@@ -32,7 +32,7 @@ const myAxios = () => {
     async (error: AxiosError) => {
       // const originalRequest = error.config;
       if (error.response?.status === 401) {
-        toast.warn('Please login again!');
+        toast.warn('Please login again!',{toastId:'401'});
         await firebaseSignOut();
       }
       return Promise.reject(error);
