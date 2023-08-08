@@ -17,7 +17,6 @@ function MainContentProjectList() {
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
 
-
   function toggleIsOpeningNewProjectModal() {
     setIsOpeningNewProjectModal(prev => !prev);
 

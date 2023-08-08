@@ -54,9 +54,11 @@ function ProjectDataRow({ projectDetail }: IProjectDataRowProps) {
                     </button>
                 </div>
             </TableCell>
-            <TableCell align="left"><div>
-                {projectDetail.project.leader?.displayName ?? '-'}
-            </div></TableCell>
+            <TableCell align="left">
+                <div>
+                    {projectDetail.project.leader?.displayName ?? '-'}
+                </div>
+            </TableCell>
         </TableRow>
     )
 }
